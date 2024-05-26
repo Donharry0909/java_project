@@ -15,6 +15,7 @@ public class MainWindow extends JFrame {
     static MainWindow gw;
 
     public MainWindow() {
+        //test
         super("Hello Swing");   // 建立标题名称
         setLayout(null);        // 使用绝对布局
 
