@@ -7,13 +7,13 @@ public class Block {
     public int num;
     public int type;
     public TetrisCanvas canvas;
-    private int step = 10; // 每次移动的步长
+    public GameWindow gameWindow;
 
-    public Block(int n, TetrisCanvas c) {
-        canvas = c;
+    public Block(int n, TetrisCanvas c, GameWindow g) {
+        canvas = c; gameWindow = g;
         Random r = new Random();
         int l = r.nextInt(3);
-        if(TetrisCanvas.collideOther(0, 3+2*l, n, 0, 0) == 0){
+        if(canvas.collideOther(this, 0) == 0){
             row = 0; col = 3+2*l; num = 2; type = 0;
             canvas.putBlocks(this, 0);
         }
@@ -35,15 +35,17 @@ public class Block {
 
     public void moveDown() {
         System.out.println("1");
-        if(TetrisCanvas.collideOther(row+1, col, num, 0, 1) == 0){
+        if(canvas.collideOther(this, 1) == 0){
             canvas.putBlocks(this, 1);
         }
-        else{
-
+        else if(canvas.collideOther(this, 1) == 1){
+            canvas.updateCheck(this);
+            System.out.println("oooooooooooooooooo");
+            gameWindow.block_generate();
         }
     }
 
-    public void updateBlock(int d){
+    public void updateBlock(int d){ //更新積木位置
         if(d == 1){
             row += 1;
         }

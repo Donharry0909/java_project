@@ -10,14 +10,16 @@ public class GameWindow extends JFrame {
     private boolean movingDown = false;
     private boolean movingRight = false;
     private Random r;
+    private TetrisCanvas canvas;
+    private Block b;
 
     public GameWindow() {
         super("Game Window");
 
         // 创建 TetrisCanvas 实例
-        TetrisCanvas canvas = new TetrisCanvas();
+        canvas = new TetrisCanvas();
         canvas.setLayout(null);
-
+    
         // 使用 BorderLayout 布局管理器
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
@@ -26,13 +28,20 @@ public class GameWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // 设置默认的关闭窗口
         setVisible(true);    // 设置窗口可见
 
-        r = new Random();
-        int n = r.nextInt(2, 9);
-        Block b = new Block(n, canvas);
-
         // 设置 KeyBindings
         setupKeyBindings(canvas); // 传递 canvas 以便设置键绑定
 
+        block_generate();
+        block_operate();
+    }
+    
+    public void block_generate(){
+        r = new Random();
+        int n = r.nextInt(2, 9);
+        b = new Block(n, canvas, this);
+    }
+
+    private void block_operate(){
         // 使用 Timer 处理连续移动
         Timer timer = new Timer(80, new ActionListener() {
             @Override
@@ -58,6 +67,7 @@ public class GameWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 b.moveDown();
             }
+            
         });
         timer1.start();
     }

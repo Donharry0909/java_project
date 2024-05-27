@@ -6,11 +6,12 @@ public class TetrisCanvas extends JPanel {
     private final int ROWS = 20;
     private final int COLS = 10;
     private Image[][] grid; // 用于存储每个网格单元的图片
+    private int[][] checkMap;
 
     public TetrisCanvas() {
         setPreferredSize(new Dimension(COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE));
         grid = new Image[ROWS][COLS];
-        
+        checkMap = new int[ROWS][COLS];
         // 初始化网格为空白
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
@@ -19,17 +20,35 @@ public class TetrisCanvas extends JPanel {
         }
     }
 
-    public static int collideOther(int row, int col, int n, int type, int d){ //if 撞到其他方塊or下邊界 //d代表是否下降
-        //d==1 下降case 停止, d==0 初始情形 換位置
+    public void test(GameWindow g){
+
+    }
+
+    public int collideOther(Block b, int d){ //if 撞到其他方塊or下邊界 //d代表是否下降
+        //d==1 初始情形->換位置, d==2 下降case->停止, d==3 左右移case->不動
+        //return 0 = 沒事, 1 = 換位置(一開始撞到方塊), 2 = 停止(下面有邊界或方塊), 3 = 不動(左右有邊界或方塊)
+
+        if (d == 1) {//如果是下降case
+            int i = b.row+1; int j = b.col;
+            if(i+2 >= ROWS){//如果下面是邊界
+                return 1;
+            }
+            if(checkMap[i][j] != 0 || checkMap[i+1][j] != 0 || checkMap[i+1][j+1] != 0 || checkMap[i+2][j+1] != 0){//如果有障礙物
+                return 1;
+            }
+        }
+        else if (true) {
+            
+        }
         return 0;
     }
 
-    public static int collideborder(int row, int col, int n, int type, int d){ //if 撞到邊界
+    public static int collideborder(Block b, int d){ //if 撞到邊界
 
         return 0;
     }
 
-    public void placeBlock(int row, int col, Image image) {
+    public void placeBlock(int row, int col, Image image) { //放置單個block
         if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
             grid[row][col] = image;
         }
@@ -39,7 +58,7 @@ public class TetrisCanvas extends JPanel {
         grid[row][col] = null;
     }
 
-    public void putBlocks(Block b, int d){
+    public void putBlocks(Block b, int d){ //放置一組blocks
         switch(b.num){
             case 2:
                 if(b.type == 0){
@@ -54,6 +73,19 @@ public class TetrisCanvas extends JPanel {
                 }
                 break;
             case 3:
+        }
+    }
+
+    public void updateCheck(Block b){
+        int i = b.row; int j = b.col;
+        switch(b.num){
+            case 2:
+                if(b.type == 0){
+                    checkMap[i][j] = 1; checkMap[i+1][j] = 1; checkMap[i+1][j+1] = 1; checkMap[i+2][j+1] = 1;
+                }
+                else if(b.type == 1){
+
+                }
         }
     }
 
