@@ -15,9 +15,6 @@ public class MainWindow extends JFrame {
     static MainWindow gw;
 
     public MainWindow() {
-        //test
-    	//test2
-    	//test3
         super("Hello Swing");   // 建立标题名称
         setLayout(null);        // 使用绝对布局
 
@@ -47,16 +44,10 @@ public class MainWindow extends JFrame {
                     if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
                         System.err.println("Error: Image not found");
                     }
-                    JLabel imageLabel = new JLabel(icon);
-                    imageLabel.setBounds(230, 620, icon.getIconWidth(), icon.getIconHeight());
-                    // 创建一个 JLabel 用于显示角色名字
-                    JLabel nameLabel = new JLabel(playerName);
-                    nameLabel.setBounds(250, 600, 100, 30);  // 根据需要调整位置
-                    Player player = new Player(playerName, imageLabel, nameLabel, 230, 620);
                     // 关闭 MainWindow
                     dispose();
                     // 打开 GameWindow，并传递 Player 对象
-                    new GameWindow(player);
+                    new GameWindow();
                 }
             }
         });
