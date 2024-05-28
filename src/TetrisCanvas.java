@@ -10,14 +10,15 @@ public class TetrisCanvas extends JPanel {
 
     public TetrisCanvas() {
         setPreferredSize(new Dimension(COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE));
-        grid = new Image[ROWS][COLS];
+        grid = new Image[ROWS][COLS];//判斷哪些格子要有顏色
         checkMap = new int[ROWS][COLS];
         // 初始化网格为空白
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
-                grid[i][j] = null;
-            }
-        }
+        //可以不用初始化本來就是null
+//        for (int i = 0; i < ROWS; i++) {
+//            for (int j = 0; j < COLS; j++) {
+//                grid[i][j] = null;
+//            }
+//        }
     }
 
     public void test(GameWindow g){

@@ -37,7 +37,7 @@ public class GameWindow extends JFrame {
     
     public void block_generate(){
         r = new Random();
-        int n = r.nextInt(2, 9);
+        int n = r.nextInt(1, 8);
         b = new Block(n, canvas, this);
     }
 

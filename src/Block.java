@@ -12,9 +12,9 @@ public class Block {
     public Block(int n, TetrisCanvas c, GameWindow g) {
         canvas = c; gameWindow = g;
         Random r = new Random();
-        int l = r.nextInt(3);
+        int l = r.nextInt(9);
         if(canvas.collideOther(this, 0) == 0){
-            row = 0; col = 3+2*l; num = 2; type = 0;
+            row = 0; col = l; num = 2; type = 0;//num之後會改成n來判斷是哪一個方塊種類
             canvas.putBlocks(this, 0);
         }
     }
