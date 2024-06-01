@@ -43,11 +43,12 @@ public class GameWindow extends JFrame {
 
     private void block_operate(){
         // 使用 Timer 处理连续移动
-        Timer timer = new Timer(80, new ActionListener() {
+        Timer timer = new Timer(120, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (movingUp) {
                     b.moveUp();
+                    movingUp = false;
                 }
                 if (movingLeft) {
                     b.moveLeft();
@@ -62,7 +63,7 @@ public class GameWindow extends JFrame {
         });
         timer.start();
         // 创建一个 Timer，每 130 毫秒触发一次 ActionEvent
-        Timer timer1 = new Timer(400, new ActionListener() {
+        Timer timer1 = new Timer(750, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 b.moveDown();
@@ -89,13 +90,13 @@ public class GameWindow extends JFrame {
         actionMap.put("moveUpPressed", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movingUp = true;
+                
             }
         });
         actionMap.put("moveUpReleased", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movingUp = false;
+                movingUp = true;
             }
         });
         actionMap.put("moveLeftPressed", new AbstractAction() {
