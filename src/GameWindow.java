@@ -12,38 +12,63 @@ public class GameWindow extends JFrame {
     private Random r;
     private TetrisCanvas canvas;
     private Block b;
+    private JLabel label; // Declare the label
+    public int score;
+    public int difficulty;
+    public int grayblocks;
 
-    public GameWindow() {
+    public GameWindow(int diff) {
         super("Game Window");
+        difficulty=diff;
 
-        // 创建 TetrisCanvas 实例
+        // Create TetrisCanvas instance
         canvas = new TetrisCanvas();
         canvas.setLayout(null);
-    
-        // 使用 BorderLayout 布局管理器
+        canvas.test(this);
+
+        // Use BorderLayout layout manager
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
 
-        setSize(400, 800);   // 设置宽和高
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // 设置默认的关闭窗口
-        setVisible(true);    // 设置窗口可见
+        score = 0;
 
-        // 设置 KeyBindings
-        setupKeyBindings(canvas); // 传递 canvas 以便设置键绑定
+        // Create and configure the label
+        label = new JLabel("Score: " + score); // Initialize the label with the score
+        JPanel labelPanel = new JPanel();
+        labelPanel.add(label);
+
+        // Add the label panel to the right side of the window
+        add(labelPanel, BorderLayout.EAST);
+
+        setSize(800, 700); // Set the width to 800 to accommodate the label
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set default close operation
+        setVisible(true); // Set the window visible
+
+        // Set KeyBindings
+        setupKeyBindings(canvas); // Pass canvas to set up key bindings
 
         block_generate();
         block_operate();
     }
-    
-    public void block_generate(){
+
+    public void block_generate() {
         r = new Random();
         int n = r.nextInt(1, 8);
         b = new Block(n, canvas, this);
+        
+        // Update the score when a block is generated
+        score += 4;
+        grayblocks++;
+        if(grayblocks==15) {
+        	grayblocks=0;
+        	canvas.generateGrayBlock();
+        }
+        updateScoreLabel();
     }
 
-    private void block_operate(){
-        // 使用 Timer 处理连续移动
-        Timer timer = new Timer(120, new ActionListener() {
+    private void block_operate() {
+        // Use Timer to handle continuous movement
+        Timer timer = new Timer(60*difficulty, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (movingUp) {
@@ -62,13 +87,13 @@ public class GameWindow extends JFrame {
             }
         });
         timer.start();
-        // 创建一个 Timer，每 130 毫秒触发一次 ActionEvent
-        Timer timer1 = new Timer(750, new ActionListener() {
+
+        // Create a Timer to trigger an ActionEvent every 750 milliseconds
+        Timer timer1 = new Timer(375*difficulty, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 b.moveDown();
             }
-            
         });
         timer1.start();
     }
@@ -136,4 +161,11 @@ public class GameWindow extends JFrame {
             }
         });
     }
+
+    // Method to update the score and the label's text
+    private void updateScoreLabel() {
+        label.setText("Score: " + score);
+    }
+
+    
 }

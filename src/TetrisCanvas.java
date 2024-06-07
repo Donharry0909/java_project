@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.Random;
+
 import javax.swing.*;
 
 public class TetrisCanvas extends JPanel {
@@ -7,6 +9,7 @@ public class TetrisCanvas extends JPanel {
     private final int COLS = 10;
     private Image[][] grid; // 用于存储每个网格单元的图片
     private int[][] checkMap; //紀錄那些方塊已著地
+    public GameWindow gameWindow;
 
     public TetrisCanvas() {
         setPreferredSize(new Dimension(COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE));
@@ -17,7 +20,7 @@ public class TetrisCanvas extends JPanel {
     }
 
     public void test(GameWindow g){
-
+    	gameWindow=g;
     }
 
     public int collideOther(Block b, int d){ //if 撞到其他方塊or下邊界 //d代表是否下降
@@ -122,12 +125,59 @@ public class TetrisCanvas extends JPanel {
         for(int i = 0; i < 4; i++){
             checkMap[b.row+b.position[b.type][i*2]][b.col+b.position[b.type][i*2+1]] = 1;
         }
+        for(int i=0;i<COLS;i++) {
+            if(checkMap[3][i]!=0) {
+                System.out.println("gameover");
+                
+                gameWindow.dispose();
+                
+            	//System.exit(0);
+            }
+        }
+        boolean full=true;
+        for(int i=0;i<ROWS;i++) {
+        	full=true;
+        	for(int j=0;j<COLS;j++) {
+        		if(checkMap[i][j]==0) {
+        			full=false;
+        		}
+        	}
+        	if(full) {
+        		for(int k=0;k<COLS;k++) {
+        			checkMap[i][k]=0;
+        			grid[i][k]=null;
+        		}
+        		for(int x=i;x>3;--x) {
+        			for(int k=0;k<COLS;k++) {
+            			checkMap[x][k]=checkMap[x-1][k];
+            			grid[x][k]=grid[x-1][k];
+            		}
+        		}
+        	}
+        }
+    }
+    
+    public void generateGrayBlock() {
+    	for(int i=2;i<ROWS-1;i++) {
+    		for(int k=0;k<COLS;k++) {
+    			checkMap[i][k]=checkMap[i+1][k];
+    			grid[i][k]=grid[i+1][k];
+    		}
+    	}
+    	for(int k=0;k<COLS;k++) {
+			checkMap[ROWS-1][k]=1;
+			grid[ROWS-1][k]=new ImageIcon(getClass().getResource("/image/block1.png")).getImage();//change to gray block if possible
+		}
+    	Random r = new Random();
+        int x = r.nextInt(COLS);
+        checkMap[ROWS-1][x]=0;
+		grid[ROWS-1][x]=null;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 if (grid[i][j] != null) {
@@ -135,10 +185,24 @@ public class TetrisCanvas extends JPanel {
                 } else {
                     g.setColor(Color.WHITE);
                     g.fillRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                    g.setColor(Color.BLACK);
-                    g.drawRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+
+                    if (i == 4) { // If the current row is the 4th row (0-indexed)
+                        // Draw top border in red
+                        g.setColor(Color.RED);
+                        g.drawLine(j * BLOCK_SIZE, i * BLOCK_SIZE, (j + 1) * BLOCK_SIZE, i * BLOCK_SIZE);
+                        
+                        // Draw other borders in black
+                        g.setColor(Color.BLACK);
+                        g.drawLine(j * BLOCK_SIZE, i * BLOCK_SIZE, j * BLOCK_SIZE, (i + 1) * BLOCK_SIZE);
+                        g.drawLine((j + 1) * BLOCK_SIZE, i * BLOCK_SIZE, (j + 1) * BLOCK_SIZE, (i + 1) * BLOCK_SIZE);
+                        g.drawLine(j * BLOCK_SIZE, (i + 1) * BLOCK_SIZE, (j + 1) * BLOCK_SIZE, (i + 1) * BLOCK_SIZE);
+                    } else {
+                        g.setColor(Color.BLACK);
+                        g.drawRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                    }
                 }
             }
         }
     }
+
 }

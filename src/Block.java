@@ -13,6 +13,7 @@ public class Block {
     public GameWindow gameWindow;
     public Image blockImage;
     public int x_len; public int y_len;
+    
 
     public Block(int n, TetrisCanvas c, GameWindow g) {
         int [][] data = {{0,0,1,0,1,1,2,1},{0,1,0,2,1,0,1,1},{},{},
@@ -44,6 +45,8 @@ public class Block {
             if(i == 10 - y_len + 2){
                 //gameover->stopgame;
                 System.out.println("gameover");
+                gameWindow.dispose();
+                System.exit(0);
                 break;
             }
             if(canvas.collideOther(this, 0) == 0){
@@ -76,6 +79,7 @@ public class Block {
     public String getName() {
         return name;
     }
+    
 
     public void setName(String name) {
         this.name = name;

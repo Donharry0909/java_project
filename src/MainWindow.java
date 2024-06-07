@@ -11,6 +11,7 @@ public class MainWindow extends JFrame {
 
     private final JLabel label;
     private final JButton button;
+    private final JButton button2;
     private final JTextField textField;
     static MainWindow gw;
 
@@ -25,10 +26,14 @@ public class MainWindow extends JFrame {
         textField = new JTextField(10); // 设置10列
         textField.setBounds(140, 100, 120, 30);
         add(textField);
-
-        button = new JButton("Click me!");  // 创建按钮
-        button.setBounds(125, 200, 150, 25);
+        
+        int difficulty=0;
+        button = new JButton("easy");  // 创建按钮
+        button.setBounds(100, 200, 70, 25);
         add(button);
+        button2 = new JButton("hard");  // 创建按钮
+        button2.setBounds(230, 200, 70, 25);
+        add(button2);
 
         // 添加按钮的动作监听器
         button.addActionListener(new ActionListener() {
@@ -47,7 +52,27 @@ public class MainWindow extends JFrame {
                     // 关闭 MainWindow
                     dispose();
                     // 打开 GameWindow，并传递 Player 对象
-                    new GameWindow();
+                    new GameWindow(2);
+                }
+            }
+        });
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String playerName = textField.getText();
+                if (playerName.isEmpty()) {
+                    // 显示警告消息框
+                    JOptionPane.showMessageDialog(MainWindow.this, "请输入名字", "警告", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    // 创建一个 JLabel 用于显示图片
+                    ImageIcon icon = new ImageIcon(getClass().getResource("/image/block2.png"));
+                    if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
+                        System.err.println("Error: Image not found");
+                    }
+                    // 关闭 MainWindow
+                    dispose();
+                    // 打开 GameWindow，并传递 Player 对象
+                    new GameWindow(1);
                 }
             }
         });
