@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 public class TetrisCanvas extends JPanel {
@@ -139,6 +142,8 @@ public class TetrisCanvas extends JPanel {
             	//System.exit(0);
             }
         }
+
+        
         boolean full=true;
         for(int i=0;i<ROWS;i++) {
         	full=true;
@@ -147,18 +152,40 @@ public class TetrisCanvas extends JPanel {
         			full=false;
         		}
         	}
-        	if(full) {
-        		for(int k=0;k<COLS;k++) {
-        			checkMap[i][k]=0;
-        			grid[i][k]=null;
-        		}
-        		for(int x=i;x>3;--x) {
-        			for(int k=0;k<COLS;k++) {
-            			checkMap[x][k]=checkMap[x-1][k];
-            			grid[x][k]=grid[x-1][k];
-            		}
-        		}
+        	if (full) {
+        	    final int rowToReset = i; // Make a final copy of i to use in the timer
+        	    Timer timer1 = new Timer(50, new ActionListener() {
+        	        int k = 0;  // Start from the first column
+
+        	        @Override
+        	        public void actionPerformed(ActionEvent e) {
+        	            if (k < COLS) {
+        	                checkMap[rowToReset][k] = 0;
+        	                grid[rowToReset][k] = null;
+        	                k++;
+        	                // Repaint the canvas to reflect changes
+        	                repaint();
+        	            } else {
+        	                ((Timer) e.getSource()).stop(); // Stop the timer when all columns are reset
+
+        	                // Shift the rows down
+        	                for (int x = rowToReset; x > 3; --x) {
+        	                    for (int w = 0; w < COLS; w++) {
+        	                        checkMap[x][w] = checkMap[x - 1][w];
+        	                        grid[x][w] = grid[x - 1][w];
+        	                    }
+        	                }
+        	                // Repaint the canvas to reflect changes
+        	                repaint();
+        	            }
+        	        }
+        	    });
+        	    timer1.start();
+        	
+
         	}
+
+
         }
     }
     
