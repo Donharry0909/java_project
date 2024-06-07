@@ -16,13 +16,15 @@ public class GameWindow extends JFrame {
     public int score;
     public int difficulty;
     public int grayblocks;
+    public GrayBlock gray;
 
-    public GameWindow(int diff) {
+
+    public GameWindow(int diff,String name) {
         super("Game Window");
         difficulty=diff;
 
         // Create TetrisCanvas instance
-        canvas = new TetrisCanvas();
+        canvas = new TetrisCanvas(name);
         canvas.setLayout(null);
         canvas.test(this);
 
@@ -46,12 +48,17 @@ public class GameWindow extends JFrame {
 
         // Set KeyBindings
         setupKeyBindings(canvas); // Pass canvas to set up key bindings
-
+        
+        gray=new GrayBlock(canvas.grid, canvas.checkMap, this);
+        
         block_generate();
         block_operate();
     }
 
     public void block_generate() {
+    	if(!this.isDisplayable()) {
+    		return;
+    	}
         r = new Random();
         int n = r.nextInt(1, 8);
         b = new Block(n, canvas, this);
@@ -61,12 +68,15 @@ public class GameWindow extends JFrame {
         grayblocks++;
         if(grayblocks==15) {
         	grayblocks=0;
-        	canvas.generateGrayBlock();
+        	gray.generateGrayBlock();
         }
         updateScoreLabel();
     }
 
     private void block_operate() {
+    	if(!this.isDisplayable()) {
+    		return;
+    	}
         // Use Timer to handle continuous movement
         Timer timer = new Timer(60*difficulty, new ActionListener() {
             @Override

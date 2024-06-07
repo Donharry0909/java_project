@@ -52,7 +52,7 @@ public class MainWindow extends JFrame {
                     // 关闭 MainWindow
                     dispose();
                     // 打开 GameWindow，并传递 Player 对象
-                    new GameWindow(2);
+                    new GameWindow(2,playerName);
                 }
             }
         });
@@ -72,7 +72,7 @@ public class MainWindow extends JFrame {
                     // 关闭 MainWindow
                     dispose();
                     // 打开 GameWindow，并传递 Player 对象
-                    new GameWindow(1);
+                    new GameWindow(1,playerName);
                 }
             }
         });

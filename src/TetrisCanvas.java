@@ -1,20 +1,21 @@
 import java.awt.*;
-import java.util.Random;
-
 import javax.swing.*;
 
 public class TetrisCanvas extends JPanel {
     private final int BLOCK_SIZE = 30; // 每个方块的大小
     private final int ROWS = 20;
     private final int COLS = 10;
-    private Image[][] grid; // 用于存储每个网格单元的图片
-    private int[][] checkMap; //紀錄那些方塊已著地
+    public Image[][] grid; // 用于存储每个网格单元的图片
+    public int[][] checkMap; //紀錄那些方塊已著地
     public GameWindow gameWindow;
-
-    public TetrisCanvas() {
+    public boolean firstlost=true;
+//    public EndGame endGame;
+    String playername;
+    public TetrisCanvas(String name) {
         setPreferredSize(new Dimension(COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE));
         grid = new Image[ROWS][COLS];//判斷哪些格子要有顏色
         checkMap = new int[ROWS][COLS];
+        playername=name;
         // 初始化网格为空白
         //grid可以不用初始化本來就是null
     }
@@ -127,9 +128,13 @@ public class TetrisCanvas extends JPanel {
         }
         for(int i=0;i<COLS;i++) {
             if(checkMap[3][i]!=0) {
-                System.out.println("gameover");
                 
-                gameWindow.dispose();
+                if(firstlost) {
+                	System.out.println("gameover");
+                    gameWindow.dispose();
+                	new EndGame(gameWindow.score,playername);
+                	firstlost=false;
+                }
                 
             	//System.exit(0);
             }
@@ -157,22 +162,6 @@ public class TetrisCanvas extends JPanel {
         }
     }
     
-    public void generateGrayBlock() {
-    	for(int i=2;i<ROWS-1;i++) {
-    		for(int k=0;k<COLS;k++) {
-    			checkMap[i][k]=checkMap[i+1][k];
-    			grid[i][k]=grid[i+1][k];
-    		}
-    	}
-    	for(int k=0;k<COLS;k++) {
-			checkMap[ROWS-1][k]=1;
-			grid[ROWS-1][k]=new ImageIcon(getClass().getResource("/image/block1.png")).getImage();//change to gray block if possible
-		}
-    	Random r = new Random();
-        int x = r.nextInt(COLS);
-        checkMap[ROWS-1][x]=0;
-		grid[ROWS-1][x]=null;
-    }
 
     @Override
     protected void paintComponent(Graphics g) {
