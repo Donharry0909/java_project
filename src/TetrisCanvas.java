@@ -134,7 +134,7 @@ public class TetrisCanvas extends JPanel {
             if(checkMap[3][i]!=0) {
                 
                 if(firstlost) {
-                    GameWindow.music.stop();
+                    gameWindow.music.stop();
                 	System.out.println("gameover");
                     gameWindow.dispose();
                 	new EndGame(gameWindow.score,playername);
@@ -155,6 +155,7 @@ public class TetrisCanvas extends JPanel {
         		}
         	}
         	if (full) {
+                gameWindow.se.play(1,true);
         	    final int rowToReset = i; // Make a final copy of i to use in the timer
         	    Timer timer1 = new Timer(50, new ActionListener() {
         	        int k = 0;  // Start from the first column

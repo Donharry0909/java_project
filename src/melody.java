@@ -17,7 +17,7 @@ public class melody {
 
     public melody(){
         url[0] = getClass().getResource("/music/theme.wav");
-        url[1] = getClass().getResource("/music/clear.mp3");
+        url[1] = getClass().getResource("/music/clear.wav");
     }
     public void play(int i, boolean music){
         try{
