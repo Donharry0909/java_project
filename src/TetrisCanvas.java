@@ -12,6 +12,7 @@ public class TetrisCanvas extends JPanel {
     public int[][] checkMap; //紀錄那些方塊已著地
     public GameWindow gameWindow;
     public boolean firstlost=true;
+    public boolean rr = false;
 //    public EndGame endGame;
     String playername;
     public TetrisCanvas(String name) {
@@ -133,6 +134,7 @@ public class TetrisCanvas extends JPanel {
             if(checkMap[3][i]!=0) {
                 
                 if(firstlost) {
+                    GameWindow.music.stop();
                 	System.out.println("gameover");
                     gameWindow.dispose();
                 	new EndGame(gameWindow.score,playername);

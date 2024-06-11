@@ -17,10 +17,16 @@ public class GameWindow extends JFrame {
     public int difficulty;
     public int grayblocks;
     public GrayBlock gray;
+    public static melody music = new melody();
+    public static melody se = new melody();
+
 
 
     public GameWindow(int diff,String name) {
         super("Game Window");
+        music.play(0, true);
+        music.loop();
+        
         setResizable(false);
         getContentPane().setBackground(Color.BLACK);
         difficulty=diff;
@@ -29,7 +35,6 @@ public class GameWindow extends JFrame {
         canvas.setLayout(null);
         canvas.test(this);
         canvas.setOpaque(false);
-
         // Use BorderLayout layout manager
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
@@ -37,13 +42,7 @@ public class GameWindow extends JFrame {
         score = 0;
 
         // Create and configure the label
-        label = new JLabel("Score: " + score /*+"\nwasd to control\n" + 
-                        "W to rotate\n" + 
-                        "A to move right\n" + 
-                        "D to move left\n" + 
-                        "S to fall faster\n" + 
-                        "Score adds 4 Everytime a block spawns\n" + 
-                        "Good Luck!"*/); // Initialize the label with the score
+        label = new JLabel("Score: " + score); // Initialize the label with the score
         JLabel ins = new JLabel("<html>wasd to control<br/>W to rotate<br/>A to move right<br/>D to move left<br/>S to fall faster<br/>Score adds 4<br/>Everytime a block spawns<br/>Good Luck!</html>");
         JPanel labelPanel = new JPanel();
         //JPanel small = new JPanel(new BorderLayout());
