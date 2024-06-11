@@ -27,43 +27,58 @@ public class MainWindow extends JFrame {
     static MainWindow gw;
 
     public MainWindow() {  // 建立标题名称
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        getContentPane().setBackground(Color.BLACK);
+        setSize(800, 800); 
+        //getContentPane().setBackground(Color.BLACK);
         setResizable(false);
-        //JPanel qq = new JPanel();
-        //qq.setSize(800, 700);
+        JPanel qq = new JPanel();
+        qq.setSize(800, 800);
+        qq.setLayout(null);  
         jj = new start();
-        //qq.setOpaque(false);
+        qq.setOpaque(false);
+
 
         
-
+         ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/image/pic2.png"));
         
+        // Create a JLabel with the background image
+        JLabel backgroundLabel = new JLabel(backgroundImage);
+        JLayeredPane layeredPane = new JLayeredPane();
+        
+
+        JPanel e = new JPanel();
+        e.add(backgroundLabel);
+        e.setBounds(0, 0, 800, 800);
+        jj.setBounds(0, 0, 800, 800);
+        layeredPane.add(e, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(jj, JLayeredPane.PALETTE_LAYER);
+        add(layeredPane);
         
 
         label = new JLabel("Enter your name:");
         Font font = new Font("Arial", Font.BOLD, 50);
         label.setFont(font);
         label.setForeground(Color.WHITE);
-        label.setBounds(190, 100, 450, 50); 
-        //qq.add(label);
+        label.setBounds(190, 380, 450, 50); 
+        qq.add(label);
 
         textField = new JTextField(10);
         textField.setPreferredSize(new Dimension(200, 30)); // 设置10列
-        textField.setBounds(290, 200, 200, 30);
-        //qq.add(textField);
+        textField.setBounds(290, 450, 200, 30);
+        qq.add(textField);
         
         int difficulty=0;
         button = new JButton("easy");  // 创建按钮
         
-        button.setBounds(200, 400, 100, 100);
+        button.setBounds(200, 500, 100, 100);
         button.setBackground(Color.WHITE);
-        //qq.add(button);
+        qq.add(button);
 
 
         button2 = new JButton("hard");  // 创建按钮
-        button2.setBounds(460, 400, 100, 100);
+        button2.setBounds(500, 500, 100, 100);
         button2.setBackground(Color.WHITE);
-        //qq.add(button2);
+        qq.add(button2);
+
 
 
         // 添加按钮的动作监听器
@@ -113,11 +128,7 @@ public class MainWindow extends JFrame {
                     // 关闭 MainWindow
                     jj.setVisible(false);
                     setLayout(null); 
-                    setSize(800, 800);
-                    add(label);
-                    add(textField);
-                    add(button);
-                    add(button2);
+                    layeredPane.add(qq, JLayeredPane.PALETTE_LAYER);
                 }
             }
         );
@@ -130,12 +141,12 @@ public class MainWindow extends JFrame {
                 }
             }
         );
-        add(jj);
+        //add(layeredPane);
         
         
 
         // 设置窗口属性
-        setSize(400, 300);   // 设置宽和高
+        //setSize(800, 800);  // 设置宽和高
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // 设置默认的关闭窗口
         setVisible(true);    // 设置窗口可见
     }
