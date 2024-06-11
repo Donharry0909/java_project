@@ -1,20 +1,7 @@
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.awt.font.*;
-
-
+import javax.swing.*;
 
 public class MainWindow extends JFrame {
 
@@ -23,12 +10,10 @@ public class MainWindow extends JFrame {
     private final JButton button2;
     private final JTextField textField;
     private start jj;
-    Font customfont;
     static MainWindow gw;
 
-    public MainWindow() {  // 建立标题名称
+    public MainWindow() {  
         setSize(800, 800); 
-        //getContentPane().setBackground(Color.BLACK);
         setResizable(false);
         JPanel qq = new JPanel();
         qq.setSize(800, 800);
@@ -36,14 +21,9 @@ public class MainWindow extends JFrame {
         jj = new start();
         qq.setOpaque(false);
 
-
-        
-         ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/image/pic2.png"));
-        
-        // Create a JLabel with the background image
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/image/pic2.png"));
         JLabel backgroundLabel = new JLabel(backgroundImage);
         JLayeredPane layeredPane = new JLayeredPane();
-        
 
         JPanel e = new JPanel();
         e.add(backgroundLabel);
@@ -52,104 +32,85 @@ public class MainWindow extends JFrame {
         layeredPane.add(e, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(jj, JLayeredPane.PALETTE_LAYER);
         add(layeredPane);
-        
 
         label = new JLabel("Enter your name:");
-        Font font = new Font("Arial", Font.BOLD, 50);
+        Font font = new Font("Arial", Font.BOLD, 30);
         label.setFont(font);
-        label.setForeground(Color.WHITE);
-        label.setBounds(190, 380, 450, 50); 
+        label.setForeground(Color.BLUE);
+        label.setBounds(300, 330, 300, 50); 
         qq.add(label);
 
         textField = new JTextField(10);
-        textField.setPreferredSize(new Dimension(200, 30)); // 设置10列
-        textField.setBounds(290, 450, 200, 30);
+        textField.setPreferredSize(new Dimension(200, 30)); 
+        textField.setBounds(330, 390, 200, 30);
         qq.add(textField);
         
-        int difficulty=0;
-        button = new JButton("easy");  // 创建按钮
-        
-        button.setBounds(200, 500, 100, 100);
-        button.setBackground(Color.WHITE);
+        button = createCustomButton("/image/easy.png", 310, 440, 100, 100);
         qq.add(button);
 
-
-        button2 = new JButton("hard");  // 创建按钮
-        button2.setBounds(500, 500, 100, 100);
-        button2.setBackground(Color.WHITE);
+        button2 = createCustomButton("/image/hard.png", 450, 440, 100, 100);
         qq.add(button2);
 
-
-
-        // 添加按钮的动作监听器
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String playerName = textField.getText();
                 if (playerName.isEmpty()) {
-                    // 显示警告消息框
                     JOptionPane.showMessageDialog(MainWindow.this, "请输入名字", "警告", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    // 创建一个 JLabel 用于显示图片
-                    ImageIcon icon = new ImageIcon(getClass().getResource("/image/block2.png"));
-                    if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
-                        System.err.println("Error: Image not found");
-                    }
-                    // 关闭 MainWindow
                     dispose();
-                    // 打开 GameWindow，并传递 Player 对象
-                    new GameWindow(2,playerName);
+                    new GameWindow(2, playerName);
                 }
             }
         });
+
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String playerName = textField.getText();
                 if (playerName.isEmpty()) {
-                    // 显示警告消息框
                     JOptionPane.showMessageDialog(MainWindow.this, "请输入名字", "警告", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    // 创建一个 JLabel 用于显示图片
-                    ImageIcon icon = new ImageIcon(getClass().getResource("/image/block2.png"));
-                    if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
-                        System.err.println("Error: Image not found");
-                    }
-                    // 关闭 MainWindow
                     dispose();
-                    // 打开 GameWindow，并传递 Player 对象
-                    new GameWindow(1,playerName);
+                    new GameWindow(1, playerName);
                 }
             }
         });
+
         jj.bb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    // 关闭 MainWindow
-                    jj.setVisible(false);
-                    setLayout(null); 
-                    layeredPane.add(qq, JLayeredPane.PALETTE_LAYER);
-                }
+                jj.setVisible(false);
+                setLayout(null); 
+                layeredPane.add(qq, JLayeredPane.PALETTE_LAYER);
             }
-        );
+        });
+
         jj.aa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    
-                    JOptionPane.showMessageDialog(MainWindow.this, "wasd to control\nW to rotate\nA to move right\nD to move left\nS to fall faster\nScore adds 4 Everytime a block spawns\nGood Luck!","instructions", JOptionPane.WARNING_MESSAGE);
-                
-                }
+                JOptionPane.showMessageDialog(MainWindow.this, "wasd to control\nW to rotate\nA to move right\nD to move left\nS to fall faster\nScore adds 4 Everytime a block spawns\nGood Luck!", "instructions", JOptionPane.WARNING_MESSAGE);
             }
-        );
-        //add(layeredPane);
-        
-        
+        });
 
-        // 设置窗口属性
-        //setSize(800, 800);  // 设置宽和高
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // 设置默认的关闭窗口
-        setVisible(true);    // 设置窗口可见
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
+
+    private JButton createCustomButton(String imagePath, int x, int y, int width, int height) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(imagePath));
+        Image image = icon.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        icon = new ImageIcon(newimg);  // transform it back
+
+        JButton button = new JButton(icon);
+        button.setBounds(x, y, width, height);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        return button;
+    }
+
     public static void main(String[] args) {
         gw = new MainWindow();
     }

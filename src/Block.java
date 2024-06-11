@@ -119,6 +119,7 @@ public class Block {
         }
         else if(canvas.collideOther(this, 1) == 2){
             canvas.updateCheck(this);
+            canvas.deleteLine(this);
             System.out.println("collide !");
             gameWindow.block_generate();
         }

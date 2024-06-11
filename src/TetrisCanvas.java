@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 public class TetrisCanvas extends JPanel {
@@ -117,6 +116,7 @@ public class TetrisCanvas extends JPanel {
         for(int i = 0; i < 4; i++){
             clearBlock(b.row+b.position[b.type][i*2], b.col+b.position[b.type][i*2+1]);
         }
+        repaint();
         b.updateBlock(d);
         Image blockImage = b.blockImage;
         for(int i = 0; i < 4; i++){
@@ -142,8 +142,9 @@ public class TetrisCanvas extends JPanel {
             	//System.exit(0);
             }
         }
+    }
 
-        
+    public void deleteLine(Block b){
         boolean full=true;
         for(int i=0;i<ROWS;i++) {
         	full=true;
@@ -156,7 +157,6 @@ public class TetrisCanvas extends JPanel {
         	    final int rowToReset = i; // Make a final copy of i to use in the timer
         	    Timer timer1 = new Timer(50, new ActionListener() {
         	        int k = 0;  // Start from the first column
-
         	        @Override
         	        public void actionPerformed(ActionEvent e) {
         	            if (k < COLS) {
@@ -170,8 +170,11 @@ public class TetrisCanvas extends JPanel {
 
         	                // Shift the rows down
         	                for (int x = rowToReset; x > 3; --x) {
-        	                    for (int w = 0; w < COLS; w++) {
+        	                    for (int w = 0; w < COLS; w++) {              
         	                        checkMap[x][w] = checkMap[x - 1][w];
+                                    if(grid[x - 1][w]!=null&&checkMap[x - 1][w]!=1){
+                                        continue;
+                                    }
         	                        grid[x][w] = grid[x - 1][w];
         	                    }
         	                }
@@ -181,11 +184,7 @@ public class TetrisCanvas extends JPanel {
         	        }
         	    });
         	    timer1.start();
-        	
-
         	}
-
-
         }
     }
     
@@ -193,31 +192,36 @@ public class TetrisCanvas extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+    
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 if (grid[i][j] != null) {
                     g.drawImage(grid[i][j], j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, this);
                 } else {
-                    g.setColor(Color.WHITE);
+                    g.setColor(new Color(0, 44, 140)); // Dark blue background
                     g.fillRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-
+    
+                    g.setColor(new Color(103, 176, 230)); // Light blue grid lines
+                    g.drawLine(j * BLOCK_SIZE, i * BLOCK_SIZE, (j + 1) * BLOCK_SIZE, i * BLOCK_SIZE);
+                    g.drawLine(j * BLOCK_SIZE, i * BLOCK_SIZE, j * BLOCK_SIZE, (i + 1) * BLOCK_SIZE);
+    
                     if (i == 4) { // If the current row is the 4th row (0-indexed)
-                        // Draw top border in red
                         g.setColor(Color.RED);
                         g.drawLine(j * BLOCK_SIZE, i * BLOCK_SIZE, (j + 1) * BLOCK_SIZE, i * BLOCK_SIZE);
-                        
-                        // Draw other borders in black
-                        g.setColor(Color.BLACK);
-                        g.drawLine(j * BLOCK_SIZE, i * BLOCK_SIZE, j * BLOCK_SIZE, (i + 1) * BLOCK_SIZE);
-                        g.drawLine((j + 1) * BLOCK_SIZE, i * BLOCK_SIZE, (j + 1) * BLOCK_SIZE, (i + 1) * BLOCK_SIZE);
-                        g.drawLine(j * BLOCK_SIZE, (i + 1) * BLOCK_SIZE, (j + 1) * BLOCK_SIZE, (i + 1) * BLOCK_SIZE);
-                    } else {
-                        g.setColor(Color.BLACK);
-                        g.drawRect(j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                     }
                 }
             }
+        }
+    
+        // Drawing the rightmost and bottom borders of the grid
+        for (int i = 0; i < ROWS; i++) {
+            g.setColor(new Color(173, 216, 230)); // Light blue grid lines
+            g.drawLine(COLS * BLOCK_SIZE, i * BLOCK_SIZE, COLS * BLOCK_SIZE, (i + 1) * BLOCK_SIZE);
+        }
+    
+        for (int j = 0; j < COLS; j++) {
+            g.setColor(new Color(173, 216, 230)); // Light blue grid lines
+            g.drawLine(j * BLOCK_SIZE, ROWS * BLOCK_SIZE, (j + 1) * BLOCK_SIZE, ROWS * BLOCK_SIZE);
         }
     }
     
