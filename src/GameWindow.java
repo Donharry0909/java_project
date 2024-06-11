@@ -21,12 +21,14 @@ public class GameWindow extends JFrame {
 
     public GameWindow(int diff,String name) {
         super("Game Window");
+        setResizable(false);
+        getContentPane().setBackground(Color.BLACK);
         difficulty=diff;
-
         // Create TetrisCanvas instance
         canvas = new TetrisCanvas(name);
         canvas.setLayout(null);
         canvas.test(this);
+        canvas.setOpaque(false);
 
         // Use BorderLayout layout manager
         setLayout(new BorderLayout());
@@ -35,14 +37,51 @@ public class GameWindow extends JFrame {
         score = 0;
 
         // Create and configure the label
-        label = new JLabel("Score: " + score); // Initialize the label with the score
+        label = new JLabel("Score: " + score /*+"\nwasd to control\n" + 
+                        "W to rotate\n" + 
+                        "A to move right\n" + 
+                        "D to move left\n" + 
+                        "S to fall faster\n" + 
+                        "Score adds 4 Everytime a block spawns\n" + 
+                        "Good Luck!"*/); // Initialize the label with the score
+        JLabel ins = new JLabel("<html>wasd to control<br/>W to rotate<br/>A to move right<br/>D to move left<br/>S to fall faster<br/>Score adds 4<br/>Everytime a block spawns<br/>Good Luck!</html>");
         JPanel labelPanel = new JPanel();
+        //JPanel small = new JPanel(new BorderLayout());
+        //mall.setOpaque(false);
+        //small.add(ins, BorderLayout.CENTER);
+        JPanel Small = new JPanel(new BorderLayout());
+        //Small.setSize(300,300);
+        Small.add(ins, BorderLayout.WEST);
+        Small.setOpaque(false);
         labelPanel.add(label);
+        //labelPanel.add(ins);
+        //labelPanel.setSize(100,100);
+        //labelPanel.setVisible(true);
+        labelPanel.setOpaque(false);
 
         // Add the label panel to the right side of the window
-        add(labelPanel, BorderLayout.EAST);
+        add(Small, BorderLayout.EAST);
+        add(labelPanel, BorderLayout.SOUTH);
+        label.setForeground(Color.WHITE);
+        ins.setForeground(Color.WHITE);
+        //label.setBounds(0, 0, 50, 50);
+        Font font2 = new Font("Comic Sans MS", Font.PLAIN, 20);
+        Font font = new Font("Arial", Font.PLAIN, 100);
+        label.setFont(font);
+        ins.setFont(font2);
+        
+        /*JLabel ins = new JLabel("Good Luck!");
+        JPanel small = new JPanel();
+        JPanel big = new JPanel();
+        small.add(ins);
+        small.setBounds(600,600,200,100);
+        add(small);
+        //small.setOpaque(false);
+        //big.setOpaque(false);
+        //big.setPreferredSize(new Dimension(200, 100));
+        ins.setForeground(Color.WHITE);*/
 
-        setSize(800, 700); // Set the width to 800 to accommodate the label
+        setSize(800, 800); // Set the width to 800 to accommodate the label
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set default close operation
         setVisible(true); // Set the window visible
 

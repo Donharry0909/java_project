@@ -2,10 +2,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.awt.font.*;
+
+
 
 public class MainWindow extends JFrame {
 
@@ -13,27 +22,49 @@ public class MainWindow extends JFrame {
     private final JButton button;
     private final JButton button2;
     private final JTextField textField;
+    private start jj;
+    Font customfont;
     static MainWindow gw;
 
-    public MainWindow() {
-        super("Hello Swing");   // 建立标题名称
-        setLayout(null);        // 使用绝对布局
+    public MainWindow() {  // 建立标题名称
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        getContentPane().setBackground(Color.BLACK);
+        setResizable(false);
+        //JPanel qq = new JPanel();
+        //qq.setSize(800, 700);
+        jj = new start();
+        //qq.setOpaque(false);
+
+        
+
+        
+        
 
         label = new JLabel("Enter your name:");
-        label.setBounds(140, 50, 100, 30);  // 设置x，y，宽，高
-        add(label);
+        Font font = new Font("Arial", Font.BOLD, 50);
+        label.setFont(font);
+        label.setForeground(Color.WHITE);
+        label.setBounds(190, 100, 450, 50); 
+        //qq.add(label);
 
-        textField = new JTextField(10); // 设置10列
-        textField.setBounds(140, 100, 120, 30);
-        add(textField);
+        textField = new JTextField(10);
+        textField.setPreferredSize(new Dimension(200, 30)); // 设置10列
+        textField.setBounds(290, 200, 200, 30);
+        //qq.add(textField);
         
         int difficulty=0;
         button = new JButton("easy");  // 创建按钮
-        button.setBounds(100, 200, 70, 25);
-        add(button);
+        
+        button.setBounds(200, 400, 100, 100);
+        button.setBackground(Color.WHITE);
+        //qq.add(button);
+
+
         button2 = new JButton("hard");  // 创建按钮
-        button2.setBounds(230, 200, 70, 25);
-        add(button2);
+        button2.setBounds(460, 400, 100, 100);
+        button2.setBackground(Color.WHITE);
+        //qq.add(button2);
+
 
         // 添加按钮的动作监听器
         button.addActionListener(new ActionListener() {
@@ -76,13 +107,38 @@ public class MainWindow extends JFrame {
                 }
             }
         });
+        jj.bb.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    // 关闭 MainWindow
+                    jj.setVisible(false);
+                    setLayout(null); 
+                    setSize(800, 800);
+                    add(label);
+                    add(textField);
+                    add(button);
+                    add(button2);
+                }
+            }
+        );
+        jj.aa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    
+                    JOptionPane.showMessageDialog(MainWindow.this, "wasd to control\nW to rotate\nA to move right\nD to move left\nS to fall faster\nScore adds 4 Everytime a block spawns\nGood Luck!","instructions", JOptionPane.WARNING_MESSAGE);
+                
+                }
+            }
+        );
+        add(jj);
+        
+        
 
         // 设置窗口属性
         setSize(400, 300);   // 设置宽和高
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // 设置默认的关闭窗口
         setVisible(true);    // 设置窗口可见
     }
-
     public static void main(String[] args) {
         gw = new MainWindow();
     }

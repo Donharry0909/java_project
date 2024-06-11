@@ -19,53 +19,60 @@ public class EndGame  extends JFrame {
     private JLabel label4;
     private JLabel label5;
     private JLabel label6;
+    private JLabel over;
     private final JButton button;
     public boolean newscore=false;
     
     public EndGame(int s,String name) {
     	super("Scoring Window");
+        setResizable(false);
+        getContentPane().setBackground(Color.BLACK);
     	/*
     	Scan txt here
     	*/
     	score=s;
     	checkHighScore(name);
+
+        
     	
     	setLayout(null);        // 使用绝对布局
-    	
+    	over = new JLabel("Game Over");
+        over.setBounds(110, 25, 200, 30);
+        Font font2 = new Font("Comic Sans MS", Font.PLAIN, 30);
+        over.setFont(font2);
+        setLabelFontSize(over, 30);
+        over.setForeground(Color.WHITE);
+        add(over);
     	if(newscore) {
     		label = new JLabel("!!!New High Score!!!");
-            label.setBounds(130, 50, 200, 30);  // 设置x，y，宽，高
+            label.setBounds(100, 100, 200, 30);  // 设置x，y，宽，高
             setLabelFontSize(label, 20); // Set font size to 20
             add(label);
     		label2 = new JLabel(name);
-            label2.setBounds(140, 100, 200, 30);  // 设置x，y，宽，高
+            label2.setBounds(180, 150, 200, 30);  // 设置x，y，宽，高
             setLabelFontSize(label2, 25); // Set font size to 20
             add(label2);
     		label3 = new JLabel(score+"");
-            label3.setBounds(180, 150, 200, 30);  // 设置x，y，宽，高
+            label3.setBounds(180, 200, 200, 30);  // 设置x，y，宽，高
             setLabelFontSize(label3, 25); // Set font size to 20
             add(label3);
     	}
     	else {
-    		label = new JLabel("High Score");
-            label.setBounds(160, 50, 200, 30);  // 设置x，y，宽，高
+    		label = new JLabel("High Score by "+ highn);
+            label.setBounds(100, 100, 200, 30);
+            //label.setBounds(160, 50, 200, 30);  // 设置x，y，宽，高
             add(label);
             
-    		label2 = new JLabel(highn);
-            label2.setBounds(170, 80, 200, 30);  // 设置x，y，宽，高
-            add(label2);
+    		
     		label3 = new JLabel(highs+"");
-            label3.setBounds(180, 110, 200, 30);  // 设置x，y，宽，高
-            add(label3);
+            label3.setBounds(270, 100, 200, 30);  // 设置x，y，宽，高
+           add(label3);
             
-    		label6 = new JLabel("My Score");
-            label6.setBounds(162, 160, 200, 30);  // 设置x，y，宽，高
+    		label6 = new JLabel(name + "'s Score");
+            label6.setBounds(100, 160, 200, 30);  // 设置x，y，宽，高
             add(label6);
-    		label4 = new JLabel(name);
-            label4.setBounds(170, 190, 200, 30);  // 设置x，y，宽，高
-            add(label4);
     		label5 = new JLabel(score+"");
-            label5.setBounds(180, 220, 200, 30);  // 设置x，y，宽，高
+            label5.setBounds(270, 160, 200, 30);  // 设置x，y，宽，高
             add(label5);
     	}
 
@@ -73,6 +80,7 @@ public class EndGame  extends JFrame {
         
         button = new JButton("restart");  // 创建按钮
         button.setBounds(140, 260, 100, 25);
+        button.setBackground(Color.WHITE);
         add(button);
         
      // 添加按钮的动作监听器
@@ -90,7 +98,7 @@ public class EndGame  extends JFrame {
     }
     
     public void checkHighScore(String name) {
-        String highScoreFilePath = "src/highScore.txt"; // Relative path to the high score file
+        String highScoreFilePath = "highScore.txt"; // Relative path to the high score file
         String highScoreName = "";
         int highscore = 0;
 
