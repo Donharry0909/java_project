@@ -10,7 +10,9 @@ public class GameWindow extends JFrame {
     private boolean movingDown = false;
     private boolean movingRight = false;
     private Random r;
+    private int[] r_arr;
     private TetrisCanvas canvas;
+    private NextBlockCanvas nextBlockCanvas;
     private Block b;
     private JLabel label; // Declare the label
     public int score;
@@ -19,67 +21,62 @@ public class GameWindow extends JFrame {
     public GrayBlock gray;
 
 
-    public GameWindow(int diff,String name) {
+    public GameWindow(int diff, String name) {
         super("Game Window");
         setResizable(false);
         getContentPane().setBackground(Color.BLACK);
-        difficulty=diff;
+        difficulty = diff;
+
         // Create TetrisCanvas instance
         canvas = new TetrisCanvas(name);
         canvas.setLayout(null);
         canvas.test(this);
         canvas.setOpaque(false);
 
+        // Create NextBlockCanvas instance
+        nextBlockCanvas = new NextBlockCanvas();
+        nextBlockCanvas.setOpaque(false);
+
         // Use BorderLayout layout manager
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
 
+        // Panel to hold TetrisCanvas and NextBlockCanvas
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setOpaque(false);
+        rightPanel.add(Box.createVerticalStrut(20)); // Add some vertical space at the top
+        rightPanel.add(nextBlockCanvas);
+
+        add(rightPanel, BorderLayout.EAST);
+
         score = 0;
+        r_arr = new int[5];
+        for (int i = 0; i < 5; i++) {
+            r = new Random();
+            int n = r.nextInt(1, 8);
+            r_arr[i] = n;
+        }
 
         // Create and configure the label
-        label = new JLabel("Score: " + score /*+"\nwasd to control\n" + 
-                        "W to rotate\n" + 
-                        "A to move right\n" + 
-                        "D to move left\n" + 
-                        "S to fall faster\n" + 
-                        "Score adds 4 Everytime a block spawns\n" + 
-                        "Good Luck!"*/); // Initialize the label with the score
+        label = new JLabel("Score: " + score);
         JLabel ins = new JLabel("<html>wasd to control<br/>W to rotate<br/>A to move right<br/>D to move left<br/>S to fall faster<br/>Score adds 4<br/>Everytime a block spawns<br/>Good Luck!</html>");
         JPanel labelPanel = new JPanel();
-        //JPanel small = new JPanel(new BorderLayout());
-        //mall.setOpaque(false);
-        //small.add(ins, BorderLayout.CENTER);
         JPanel Small = new JPanel(new BorderLayout());
-        //Small.setSize(300,300);
         Small.add(ins, BorderLayout.WEST);
         Small.setOpaque(false);
         labelPanel.add(label);
-        //labelPanel.add(ins);
-        //labelPanel.setSize(100,100);
-        //labelPanel.setVisible(true);
         labelPanel.setOpaque(false);
 
         // Add the label panel to the right side of the window
-        add(Small, BorderLayout.EAST);
+        add(Small, BorderLayout.WEST);
         add(labelPanel, BorderLayout.SOUTH);
         label.setForeground(Color.WHITE);
         ins.setForeground(Color.WHITE);
-        //label.setBounds(0, 0, 50, 50);
         Font font2 = new Font("Comic Sans MS", Font.PLAIN, 20);
         Font font = new Font("Arial", Font.PLAIN, 100);
         label.setFont(font);
         ins.setFont(font2);
-        
-        /*JLabel ins = new JLabel("Good Luck!");
-        JPanel small = new JPanel();
-        JPanel big = new JPanel();
-        small.add(ins);
-        small.setBounds(600,600,200,100);
-        add(small);
-        //small.setOpaque(false);
-        //big.setOpaque(false);
-        //big.setPreferredSize(new Dimension(200, 100));
-        ins.setForeground(Color.WHITE);*/
 
         setSize(800, 800); // Set the width to 800 to accommodate the label
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set default close operation
@@ -87,37 +84,48 @@ public class GameWindow extends JFrame {
 
         // Set KeyBindings
         setupKeyBindings(canvas); // Pass canvas to set up key bindings
-        
-        gray=new GrayBlock(canvas.grid, canvas.checkMap, this);
-        
+
+        gray = new GrayBlock(canvas.grid, canvas.checkMap, this);
+
         block_generate();
         block_operate();
     }
 
     public void block_generate() {
-    	if(!this.isDisplayable()) {
-    		return;
-    	}
+        if (!this.isDisplayable()) {
+            return;
+        }
+        b = new Block(r_arr[0], canvas, this);
         r = new Random();
         int n = r.nextInt(1, 8);
-        b = new Block(n, canvas, this);
-        
+        for (int i = 0; i < 5; i++) {
+            if (i == 4) {
+                r_arr[i] = n;
+            } else {
+                r_arr[i] = r_arr[i + 1];
+            }
+        }
+
+        // Update next block canvas
+        nextBlockCanvas.clearAllBlocks();
+        nextBlockCanvas.updateCanva(r_arr[0]);
+
         // Update the score when a block is generated
         score += 4;
         grayblocks++;
-        if(grayblocks==15) {
-        	grayblocks=0;
-        	gray.generateGrayBlock();
+        if (grayblocks == difficulty * 5 + 7) {
+            grayblocks = 0;
+            gray.generateGrayBlock();
         }
         updateScoreLabel();
     }
 
     private void block_operate() {
-    	if(!this.isDisplayable()) {
-    		return;
-    	}
+        if (!this.isDisplayable()) {
+            return;
+        }
         // Use Timer to handle continuous movement
-        Timer timer = new Timer(60*difficulty, new ActionListener() {
+        Timer timer = new Timer(60 * difficulty, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (movingUp) {
@@ -138,7 +146,7 @@ public class GameWindow extends JFrame {
         timer.start();
 
         // Create a Timer to trigger an ActionEvent every 750 milliseconds
-        Timer timer1 = new Timer(375*difficulty, new ActionListener() {
+        Timer timer1 = new Timer(375 * difficulty, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 b.moveDown();
@@ -164,7 +172,7 @@ public class GameWindow extends JFrame {
         actionMap.put("moveUpPressed", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
             }
         });
         actionMap.put("moveUpReleased", new AbstractAction() {
@@ -216,5 +224,4 @@ public class GameWindow extends JFrame {
         label.setText("Score: " + score);
     }
 
-    
 }
